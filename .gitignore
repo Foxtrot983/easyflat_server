@@ -1,0 +1,5 @@
+/venv/
+*.pyc
+plan.txt
+*.env
+test.py
