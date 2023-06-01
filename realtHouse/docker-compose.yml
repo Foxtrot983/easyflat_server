@@ -7,21 +7,26 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
+    networks:
+      - easyflat_net
     ports:
       - '8080:8000'
     env_file:
       - .env.dev
     depends_on:
       - db
+      - redis
 
 
   db:
     container_name: easyflat_db
     image: postgres:14.7-alpine
+    networks:
+      - easyflat_net
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=fapi_docker
+      - POSTGRES_DB=fapi
       - POSTGRES_USER=lisatrot
       - POSTGRES_PASSWORD=11111111
     ports:
@@ -29,13 +34,18 @@ services:
 
   redis:
     container_name: easyflat_redis
+    networks:
+      - easyflat_net
     image: redis:7.2-rc
     restart: always
     ports:
-      - '0.0.0.0:6380:6379'
+      - '6370:6379'
     volumes: 
       - redis_data:/var/lib/redis/data
       
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  easyflat_net:
