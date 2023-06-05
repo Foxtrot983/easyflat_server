@@ -1,3 +1,0 @@
-1) Перенести скрапер картинок на Pillow (In Progress)
-2) Вебсокеты + чатик (In Progress)
-3) Redis => AnonToken (Done)
