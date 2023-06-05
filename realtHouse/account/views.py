@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import get_user_model
 from django.conf import settings 
 
@@ -48,5 +48,8 @@ def give_anon_token(request):
     #return HttpResponse(f"Set anon-token successfully: {request.session['anon-token']}")
     #return HttpResponse(
     #    f"Test request: {session_key}, anon_token: {redis_instance.get(name=session_key)}")
-    return HttpResponseRedirect('/houses/')
-    redirrect
+    #return HttpResponseRedirect('/houses/')
+    #redirrect
+    return JsonResponse(data={
+        'anon_token': anon_token,
+    })
