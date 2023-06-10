@@ -16,7 +16,8 @@ class PhotosValue(serializers.RelatedField):
             
 class HouseViewSetSerializer(serializers.ModelSerializer):
     marketplace = MarketplaceValue(read_only=True)
-    photos = serializers.StringRelatedField(source="photos.first.image")
+    #photos = serializers.StringRelatedField(source="photos.first.image")
+    photos = PhotosValue(many=True, read_only=True)
     class Meta:
         model = House
         fields = [
