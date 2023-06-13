@@ -4,7 +4,7 @@ from django.utils import timezone as tz
 import random
 import string
 
-from .access import make_access
+from utils.make_access import make_access
 
 def generate_random_string() -> str:
     token = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for i in range(20))

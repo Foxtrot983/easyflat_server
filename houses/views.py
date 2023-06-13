@@ -3,21 +3,22 @@ from django.shortcuts import HttpResponse, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.utils import timezone as tz
 
-
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+#from rest_framework.mixins import CreateModelMixin
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework import status
 
 from django_filters import rest_framework as filters
 
 from .models import Marketplace, HousePhoto, House
 from account.models import AnonToken
-from .serializers import HouseViewSetSerializer, HouseDetailSerializer
+from .serializers import HouseSerializer
 from .filters import HouseFilter
 
 
 from redis.exceptions import DataError
-from utils import redis_connect
+from utils import redis_connect, set_byn
 
 redis_instance = redis_connect()
 
@@ -35,10 +36,11 @@ def check_token(session_key):
 
 
 #TODO Pagination
-class HousesViewSet(ReadOnlyModelViewSet):
+class HousesViewSet(ModelViewSet):
     queryset = House.objects.all()
-    serializer_class = HouseViewSetSerializer
-    permission_classes = [AllowAny,]
+    serializer_class = HouseSerializer
+    #permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = HouseFilter
     
@@ -70,5 +72,20 @@ class HousesViewSet(ReadOnlyModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         house = get_object_or_404(queryset, id=self.kwargs['pk'])
-        serializer = HouseDetailSerializer(house)
+        serializer = HouseSerializer(house)
         return Response(serializer.data)
+
+'''
+{
+    'amountusd': 200,
+    'rent_rooms': 2,
+    'address':"TestAddress",
+    'description':awdadwawd,
+    'marketplace_id':6,
+    "user_id": 1,
+    'location_a':12,
+    'location_b'24:,
+    'phoneNumber': "123123123",
+    'photos':['test1', 'test2']
+}
+'''

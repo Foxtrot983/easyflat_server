@@ -1,6 +1,7 @@
 asgiref==3.6.0
 async-timeout==4.0.2
 attrs==23.1.0
+beautifulsoup4==4.12.2
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
@@ -28,6 +29,7 @@ jsonschema==4.17.3
 MarkupSafe==2.1.2
 oauthlib==3.2.2
 packaging==23.1
+Pillow==9.5.0
 psycopg2-binary==2.9.6
 pycparser==2.21
 PyJWT==2.7.0
@@ -42,7 +44,7 @@ ruamel.yaml==0.17.26
 ruamel.yaml.clib==0.2.7
 social-auth-app-django==5.2.0
 social-auth-core==4.4.2
+soupsieve==2.4.1
 sqlparse==0.4.4
 uritemplate==4.1.1
 urllib3==2.0.2
-wheel==0.40.0
