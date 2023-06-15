@@ -1,5 +1,5 @@
-/venv/
+.env
 *.pyc
-plan.txt
-*.env
-test.py
+/media/
+/__pycache__/
+/.pytest_cache/
