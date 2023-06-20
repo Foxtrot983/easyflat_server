@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import HttpResponse, get_object_or_404
+from django.shortcuts import HttpResponse, get_list_or_404, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.utils import timezone as tz
 
@@ -8,6 +8,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 
 from django_filters import rest_framework as filters
 
@@ -34,8 +35,6 @@ def check_token(session_key):
     return result
     
 
-
-#TODO Pagination
 class HousesViewSet(ModelViewSet):
     queryset = House.objects.all()
     serializer_class = HouseSerializer
@@ -74,7 +73,26 @@ class HousesViewSet(ModelViewSet):
         house = get_object_or_404(queryset, id=self.kwargs['pk'])
         serializer = HouseSerializer(house)
         return Response(serializer.data)
-
+    
+    @action(methods=["GET",], detail=False)
+    def my_owns(self, request):
+        #if self.request.user
+        #print(f"1: {request.__dir__()}")
+        if self.request.user.is_authenticated:
+            if self.request.method == "GET":
+                
+                #print(self.request.user.id)
+                queryset = House.objects.filter(user_id=self.request.user.id).order_by('-created_at')
+                #print(queryset)
+                house = get_list_or_404(queryset)
+                #print(house[0])
+                serializer = HouseSerializer(queryset, many=True).data
+                return Response(serializer)
+            
+            if self.request.method == "POST":
+                return Response("Wrong Endpoint")
+        else:
+            return Response('405 Method Not Allowed')
 '''
 {
     'amountusd': 200,

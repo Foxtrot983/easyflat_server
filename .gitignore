@@ -1,5 +1,7 @@
 .env
 *.pyc
 /media/
-/__pycache__/
+__pycache__/
 /.pytest_cache/
+DOCKER .env
+.idea

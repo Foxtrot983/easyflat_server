@@ -34,7 +34,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', default=False)
+DEBUG = env('DJANGO_DEBUG', default=False)
 
 
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
@@ -43,6 +43,7 @@ ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 # Application definition
 
 DJANGO_APPS = [
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,6 +56,7 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'account',
     'houses',
+    "chat",
 ]
 
 THIRD_PARTY_APPS = [
@@ -100,8 +102,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'realtHouse.wsgi.application'
-
+#WSGI_APPLICATION = 'realtHouse.wsgi.application'
+ASGI_APPLICATION = 'realtHouse.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -254,3 +256,18 @@ AUTH_USER_MODEL = 'account.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+#CHANNELS_REDIS_HOST = env.str('CHANNELS_REDIS_HOST', 'localhost')
+#CHANNELS_REDIS_PORT = env.int('CHANNELS_REDIS_PORT', 6379)
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [f"redis://{REDIS_HOST}:{REDIS_PORT}/2"],
+        },
+    },
+}
+

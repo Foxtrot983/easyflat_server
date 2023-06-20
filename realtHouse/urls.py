@@ -40,6 +40,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"auth/", include('djoser.urls')),
     path(r"auth/", include('djoser.urls.authtoken')),
+    path(r'auth/', include('djoser.social.urls')),
+
+    
     re_path(
         r"^api/v1/docs/$",
         schema_view.with_ui("swagger", cache_timeout=0),

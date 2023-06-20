@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import CustomUser
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 class Marketplace(models.Model):
@@ -12,7 +12,7 @@ class Marketplace(models.Model):
         return f"{self.id}: {self.name}"
 
 class House(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, null=True, default=0)
     amountusd = models.SmallIntegerField(db_column='amountUSD', blank=True, null=True)
     amountbyn = models.SmallIntegerField(db_column='amountBYN', blank=True, null=True)
     rent_rooms = models.SmallIntegerField(default=0)

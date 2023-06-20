@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user
+from django.contrib.auth import get_user, get_user_model
 
 from utils import set_byn
 
@@ -58,13 +58,14 @@ class HousePhotoSerializers(serializers.ModelSerializer):
         
         
 class HouseSerializer(serializers.ModelSerializer):
-    marketplace = MarketplaceValue(queryset=Marketplace.objects.all())
+    marketplace = MarketplaceValue(queryset=Marketplace.objects.all(), required=False)
     #photos = PhotosValue(many=True)
     photos = HousePhotoSerializers(many=True, read_only=True)
     uploaded_photos = serializers.ListField(
         child=serializers.ImageField(allow_empty_file=False, use_url=False),
         write_only=True
     )
+    #user = serializers.RelatedField(many=False, queryset=get_user_model().objects.all())
 
     def create(self, validated_data):
         uploaded_images = validated_data.pop("uploaded_photos")
@@ -75,7 +76,7 @@ class HouseSerializer(serializers.ModelSerializer):
         amountbyn = set_byn(validated_data['amountusd'])
         marketplace = Marketplace.objects.get(name='easyflat')
         house = House.objects.create(amountbyn=amountbyn, marketplace=marketplace, phoneNumber=user.phoneNumber, **validated_data)
-        print(validated_data)
+        #print(validated_data)
 
         for image in uploaded_images:
             HousePhoto.objects.create(house=house, image=image)
